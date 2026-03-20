@@ -59,8 +59,15 @@ function ensureAlertModal() {
     `
     <div class="modal fade" id="alertModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content p-4 text-center">
-          <h4 id="alertTitle" class="fw-bold mb-2"></h4>
+<div class="modal-content p-4 text-center" style="
+  background: rgba(15, 15, 15, 0.85);
+  color: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+">          <h4 id="alertTitle" class="fw-bold mb-2"></h4>
           <div id="alertMessage" class="mb-3"></div>
           <div id="alertButtons" class="d-flex justify-content-center gap-2"></div>
         </div>
