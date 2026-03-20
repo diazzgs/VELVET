@@ -172,6 +172,33 @@ function ensureSnackContainer() {
     );
   }
 }
+function showConfirmAlert(message, callback) {
+  ensureAlertModal();
+
+  document.getElementById("alertTitle").innerText = "Confirmar";
+  document.getElementById("alertMessage").innerText = message;
+
+  const buttons = document.getElementById("alertButtons");
+  buttons.innerHTML = `
+    <button class="btn btn-outline-light w-50" id="cancelBtn">Cancelar</button>
+    <button class="btn btn-danger w-50" id="confirmBtn">Eliminar</button>
+  `;
+
+  const modal = getModalInstance();
+
+  document.getElementById("cancelBtn").onclick = () => {
+    modal.hide();
+  };
+
+  document.getElementById("confirmBtn").onclick = () => {
+    modal.hide();
+    if (callback) callback();
+  };
+
+  modal.show();
+}
+
+window.showConfirmAlert = showConfirmAlert;
 
 function showSnack(message, type = "success", duration = 2200) {
   ensureSnackContainer();

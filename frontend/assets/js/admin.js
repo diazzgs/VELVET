@@ -62,7 +62,7 @@ Admin.editar = function (id) {
 
 
 Admin.eliminar = async function (id) {
-  showAlert("¿Eliminar producto?", "info", async () => {
+  showConfirmAlert("¿Eliminar producto?", async () => {
     try {
       await API.deleteProducto(id);
       showSnack("Producto eliminado", "success");
