@@ -7,15 +7,12 @@ AdminCategorias.cargarCategorias = async function () {
   try {
     const categorias = await API.getCategorias();
 
-    if (categorias.length === 0) {
+    if (!categorias || categorias.length === 0) {
       cont.innerHTML = "<p>No hay categorías registradas.</p>";
       return;
     }
 
-    let html = `
-      <table class="table table-bordered table-striped">
-        <tbody>
-    `;
+    let html = `<table class="table table-bordered table-striped"><tbody>`;
 
     categorias.forEach((cat, index) => {
       const imagenes = [
@@ -28,20 +25,10 @@ AdminCategorias.cargarCategorias = async function () {
 
       html += `
         <tr>
-          <td style="
-            height: 220px;
-            background-image: url('${imagen}');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            border: none;
-            padding: 0;
-          "></td>
-
+          <td style="height:220px;background:url('${imagen}') center/cover no-repeat;"></td>
           <td>
             <div class="categoria-content">
               <div class="categoria-nombre">${cat.nombre}</div>
-
               <button class="btn-eliminar" onclick="AdminCategorias.eliminar(${cat.id})">
                 Eliminar
               </button>
@@ -52,44 +39,79 @@ AdminCategorias.cargarCategorias = async function () {
     });
 
     html += "</tbody></table>";
-
     cont.innerHTML = html;
 
   } catch (err) {
-    cont.innerHTML = "<p>Error al cargar categorías.</p>";
+    showSnack("Error al cargar categorías", "error");
   }
 };
 
+
 AdminCategorias.mostrarFormulario = function () {
-  const nombre = prompt("Ingrese el nombre de la nueva categoría:");
-
-  if (!nombre) return;
-
-  AdminCategorias.crear(nombre);
+  showInputAlert("Nueva categoría", "Nombre de la categoría", function (nombre) {
+    AdminCategorias.crear(nombre);
+  });
 };
+
 
 AdminCategorias.crear = async function (nombre) {
   try {
     await API.createCategoria({ nombre });
 
-    alert("Categoría registrada con éxito");
+    showSnack("Categoría creada correctamente", "success");
     AdminCategorias.cargarCategorias();
+
   } catch (err) {
-    alert("Error al crear categoría: " + err.message);
+    showAlert("Error al crear categoría: " + err.message, "error");
   }
 };
 
-AdminCategorias.eliminar = async function (id) {
-  const confirmar = confirm("¿Seguro que deseas eliminar esta categoría?");
-  if (!confirmar) return;
 
-  try {
-    await API.deleteCategoria(id);
-    alert("Categoría eliminada con éxito");
-    AdminCategorias.cargarCategorias();
-  } catch (err) {
-    alert("Error al eliminar categoría: " + err.message);
-  }
+AdminCategorias.eliminar = function (id) {
+  ensureAlertModal();
+
+  document.getElementById("alertTitle").innerHTML = `
+  <span style="font-size:20px; font-weight:700;">
+    Eliminar categoría
+  </span>
+`;
+
+document.getElementById("alertMessage").innerHTML = `
+  <p style="font-size:15px; margin-bottom:6px; color:#333;">
+    ¿Seguro que deseas eliminar esta categoría?
+  </p>
+  <small style="color:#777;">
+    Esta acción no se puede deshacer
+  </small>
+`;
+
+  const buttons = document.getElementById("alertButtons");
+  buttons.innerHTML = `
+    <button class="btn btn-secondary w-50" id="cancelBtn">Cancelar</button>
+    <button class="btn btn-danger w-50" id="confirmBtn">Eliminar</button>
+  `;
+
+  const modal = getModalInstance();
+
+  document.getElementById("cancelBtn").onclick = function () {
+    modal.hide();
+  };
+
+  document.getElementById("confirmBtn").onclick = async function () {
+    try {
+      await API.deleteCategoria(id);
+
+      modal.hide();
+      showSnack("Categoría eliminada", "success");
+      AdminCategorias.cargarCategorias();
+
+    } catch (err) {
+      modal.hide();
+      showAlert("Error al eliminar: " + err.message, "error");
+    }
+  };
+
+  modal.show();
 };
 
 window.AdminCategorias = AdminCategorias;
