@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shoparé - Inicio</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f4f4;
+      color: #0b1220;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    /* HERO */
+    .hero-section {
+      position: relative;
+      min-height: 92vh;
+      background: url('../assets/img/image.png') center center/cover no-repeat;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 30px 20px 140px;
+      overflow: hidden;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(6, 20, 43, 0.82), rgba(6, 20, 43, 0.28));
+      z-index: 1;
+    }
+
+    .hero-wrapper {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .hero-topbar {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 90px;
+    }
+
+    
+    .hero-content {
+      max-width: 560px;
+      color: #fff;
+      padding-left: 10px;
+    }
+
+    .hero-kicker {
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Segoe UI', sans-serif;
+      color: #dbeafe;
+      margin-bottom: 18px;
+      display: inline-block;
+    }
+
+    .hero-content h1 {
+      font-size: 3.3rem;
+      line-height: 1.1;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .hero-content p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #e5e7eb;
+      max-width: 500px;
+      margin-bottom: 28px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      background: white;
+      color: #0b1220;
+      padding: 12px 30px;
+      border-radius: 999px;
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 600;
+      transition: 0.3s ease;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-2px);
+      color: #0b1220;
+    }
+
+    .hero-wave {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
+    .hero-wave svg {
+      display: block;
+      width: 100%;
+      height: 140px;
+    }
+
+    /* SECCIÓN 2 */
+    .about-section {
+      background: #f4f4f4;
+      padding: 50px 0 70px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .image-collage {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .image-column-left {
+      display: grid;
+      gap: 18px;
+    }
+
+    .small-card-image,
+    .large-card-image {
+      overflow: hidden;
+      background: #ddd;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .small-card-image img,
+    .large-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .small-card-image.top {
+      height: 220px;
+      position: relative;
+    }
+
+    .small-card-image.bottom {
+      height: 150px;
+    }
+
+    .large-card-image {
+      height: 390px;
+      position: relative;
+    }
+
+    .floating-box {
+      position: absolute;
+      background: white;
+      color: #0b1220;
+      padding: 18px 20px;
+      min-width: 110px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    }
+
+    .floating-box strong {
+      display: block;
+      font-size: 2rem;
+      line-height: 1;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .floating-box span {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .floating-box.left {
+      top: -16px;
+      left: -16px;
+    }
+
+    .floating-box.right {
+      bottom: -18px;
+      left: -20px;
+    }
+
+    .about-content .mini-pill,
+    .catalog-section .mini-pill {
+      display: inline-block;
+      padding: 7px 16px;
+      border: 1px solid rgba(11, 18, 32, 0.18);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-family: 'Segoe UI', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+      background: white;
+    }
+
+    .about-content h2,
+    .catalog-section h2 {
+      font-size: 2.5rem;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .about-content p {
+      color: #334155;
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.9;
+      margin-bottom: 20px;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px 0;
+    }
+
+    .feature-list li {
+      position: relative;
+      padding-left: 26px;
+      margin-bottom: 12px;
+      font-family: 'Segoe UI', sans-serif;
+      color: #1e293b;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #0b1220;
+      font-weight: bold;
+    }
+
+    .dark-btn {
+      display: inline-block;
+      background: #031b4b;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 600;
+      transition: 0.3s ease;
+    }
+
+    .dark-btn:hover {
+      background: #08265f;
+      color: white;
+    }
+
+    /* BENEFICIOS */
+    .benefits-section {
+      background: #031b4b;
+      padding: 65px 0;
+    }
+
+    .benefit-card {
+      border: 1px solid rgba(255,255,255,0.28);
+      padding: 28px 22px;
+      height: 100%;
+      color: white;
+      background: transparent;
+      transition: 0.3s ease;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .benefit-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+    }
+
+    .benefit-card h4 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .benefit-card p {
+      margin: 0;
+      color: #dbeafe;
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    /* CATÁLOGO FINAL */
+    .catalog-section {
+      background: #f4f4f4;
+      padding: 70px 0 90px;
+    }
+
+    .catalog-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 35px;
+      flex-wrap: wrap;
+    }
+
+    .catalog-top .dark-btn {
+      padding: 11px 24px;
+    }
+
+    .catalog-card {
+      position: relative;
+      height: 420px;
+      overflow: hidden;
+      background: #0b1220;
+    }
+
+    .catalog-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .catalog-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .catalog-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11,18,32,0.92), rgba(11,18,32,0.2));
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 22px;
+    }
+
+    .catalog-arrow {
+      align-self: flex-end;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      color: #0b1220;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .catalog-text {
+      color: white;
+    }
+
+    .catalog-text small {
+      display: block;
+      font-family: 'Segoe UI', sans-serif;
+      color: #dbeafe;
+      margin-bottom: 6px;
+    }
+
+    .catalog-text h3 {
+      font-size: 2rem;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .catalog-text p {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #e5e7eb;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    /* SALUDO */
+    .saludo-home {
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 1rem;
+      color: #475569;
+      margin-bottom: 18px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .hero-content h1 {
+        font-size: 2.7rem;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-content h2,
+      .catalog-section h2 {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        min-height: 85vh;
+        padding-bottom: 110px;
+      }
+
+      .hero-topbar {
+        margin-bottom: 55px;
+      }
+
+      .hero-content h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero-content p {
+        font-size: 0.98rem;
+      }
+
+      .image-collage {
+        grid-template-columns: 1fr;
+      }
+
+      .large-card-image {
+        height: 320px;
+      }
+
+      .small-card-image.top,
+      .small-card-image.bottom {
+        height: 200px;
+      }
+
+      .catalog-card {
+        height: 360px;
+      }
+
+      .catalog-text h3 {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero-menu {
+        gap: 14px;
+        padding: 10px 18px;
+      }
+
+      .hero-menu a {
+        font-size: 0.85rem;
+      }
+
+      .hero-content h1 {
+        font-size: 1.9rem;
+      }
+
+      .about-content h2,
+      .catalog-section h2 {
+        font-size: 1.6rem;
+      }
+
+      .catalog-card {
+        height: 320px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="navbar-container"></div>
+
+  <!-- HERO -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-wrapper">
+      <div class="hero-topbar">
+
+      </div>
+
+      <div class="hero-content">
+        <span class="hero-kicker">Velvet premium</span>
+        <h1>Explora productos exclusivos para una experiencia de compra elegante</h1>
+        <p>
+          Descubre una tienda moderna con estilo visual premium, compras seguras
+          y una selección de productos pensada para ofrecer calidad y confianza.
+        </p>
+        <a href="productos.html" class="hero-btn">Ver productos</a>
+      </div>
+    </div>
+
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 180" preserveAspectRatio="none">
+        <path fill="#f4f4f4" d="M0,96L80,101.3C160,107,320,117,480,112C640,107,800,85,960,74.7C1120,64,1280,64,1360,64L1440,64L1440,192L1360,192C1280,192,1120,192,960,192C800,192,640,192,480,192C320,192,160,192,80,192L0,192Z"></path>
+      </svg>
+    </div>
+  </section>
+
+  <!-- SECCIÓN IMÁGENES + TEXTO -->
+  <section class="about-section">
+    <div class="container">
+      <div class="saludo-home" id="saludo"></div>
+
+      <div class="about-grid">
+        <div class="image-collage">
+          <div class="image-column-left">
+            <div class="small-card-image top">
+              <img src="../assets/img/mision.jpg" alt="Misión">
+              <div class="floating-box left">
+                <strong>100+</strong>
+                <span>productos</span>
+              </div>
+            </div>
+
+            <div class="small-card-image bottom">
+              <img src="../assets/img/hero2.jpg" alt="Envíos rápidos">
+            </div>
+          </div>
+
+          <div class="large-card-image">
+            <img src="../assets/img/vision.jpg" alt="Visión">
+            <div class="floating-box right">
+              <strong>300+</strong>
+              <span>clientes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-content">
+          <span class="mini-pill">Sobre nosotros</span>
+          <h2>Te ayudamos a encontrar productos con estilo, confianza y calidad</h2>
+          <p>
+            Shoparé busca brindar una experiencia de compra moderna, segura y eficiente,
+            manteniendo una estética elegante y una navegación cómoda para cada cliente.
+          </p>
+
+          <ul class="feature-list">
+            <li>Experiencia de compra moderna y visualmente atractiva</li>
+            <li>Pagos seguros para mayor tranquilidad</li>
+            <li>Envíos rápidos y atención confiable</li>
+            <li>Productos de alta calidad cuidadosamente seleccionados</li>
+          </ul>
+
+          <a href="productos.html" class="dark-btn">Explorar catálogo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN FINAL -->
+  <section class="catalog-section">
+    <div class="container">
+      <div class="catalog-top">
+        <div>
+          <span class="mini-pill">Descubre más</span>
+          <h2>¿Qué quieres explorar hoy en Velvet?</h2>
+        </div>
+
+        <a href="productos.html" class="dark-btn">Ver más</a>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="catalog-card">
+            <img src="../assets/img/hero2.jpg" alt="Envíos rápidos">
+            <div class="catalog-overlay">
+              <div class=""></div>
+              <div class="catalog-text">
+                <small>Servicio destacado</small>
+                <h3>Envíos rápidos</h3>
+                <p>
+                  Una experiencia eficiente para que tus pedidos lleguen en el menor tiempo posible.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="catalog-card">
+            <img src="../assets/img/hero3.jpg" alt="Pagos seguros">
+            <div class="catalog-overlay">
+              <div class=""></div>
+              <div class="catalog-text">
+                <small>Compra protegida</small>
+                <h3>Pagos seguros</h3>
+                <p>
+                  Compra con confianza gracias a procesos diseñados para proteger tu información.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="catalog-card">
+            <img src="../assets/img/hero4.jpg" alt="Calidad premium">
+            <div class="catalog-overlay">
+              <div class=""></div>
+              <div class="catalog-text">
+                <small>Selección especial</small>
+                <h3>Calidad premium</h3>
+                <p>
+                  Productos seleccionados cuidadosamente para mantener el estilo y la calidad del proyecto.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/navbar.js"></script>
+
+  <script>
+    Auth.requireAuth(["cliente"]);
+
+    const user = Auth.currentUser();
+    document.getElementById("saludo").innerText =
+      "Hola, " + (user?.nombre || "Cliente") + ". Bienvenido a Velvet";
+  </script>
+
+</body>
+</html> 

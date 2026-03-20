@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --bg-main: #e8e8e8;
+      --panel: rgba(230, 222, 222, 0.82);
+      --panel-border: rgba(15,23,42,0.06);
+      --text-soft: #6b7280;
+      --text-main: #111827;
+      --shadow-soft: 0 10px 25px rgba(0,0,0,0.08);
+      --radius: 22px;
+    }
+
+    *{
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+    }
+
+    .background-full {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+    }
+
+    .background-full img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(62, 59, 59, 0.6);
+      z-index: -1;
+      backdrop-filter: blur(4px);
+    }
+
+    .dashboard-shell {
+      width: min(95%, 1380px);
+      margin: 24px auto;
+      background: rgba(255,255,255,0.38);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.14);
+      overflow: hidden;
+      padding: 18px;
+    }
+
+    .dashboard-main {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .top-layout {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .left-layout {
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 18px;
+    }
+
+    .right-layout {
+      display: grid;
+      grid-template-rows: auto auto auto;
+      gap: 18px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .bottom-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .bottom-column {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .card-box {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .hero-card {
+      padding: 12px;
+    }
+
+    .hero {
+      position: relative;
+      height: 310px;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.82);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0.08));
+    }
+
+    .hero-text {
+      position: absolute;
+      left: 20px;
+      bottom: 18px;
+      right: 20px;
+      z-index: 2;
+      color: #fff;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.08;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.45);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: #1f2937;
+    }
+
+    .metric-card {
+      min-height: 118px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 8px;
+      text-transform: none;
+    }
+
+    .metric-value {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1;
+      color: #111827;
+      letter-spacing: -0.5px;
+      word-break: break-word;
+    }
+
+    .metric-value.money {
+      font-size: 27px;
+    }
+
+    .chart-box {
+      min-height: 290px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-wrap {
+      position: relative;
+      flex: 1;
+      min-height: 220px;
+    }
+
+    .chart-wrap.small-donut {
+      min-height: 250px;
+    }
+
+    .action-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .action-buttons .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 12px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .btn-dark-soft {
+      background: #111111;
+      color: #fff;
+    }
+
+    .btn-yellow {
+      background: #ffffff;
+      color: #111;
+    }
+
+    .year-box {
+      border-top: 1px solid rgba(0,0,0,0.08);
+      padding-top: 12px;
+    }
+
+    .year-box .metric-value {
+      font-size: 24px;
+    }
+
+    .list-panel {
+      min-height: 220px;
+    }
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .list-header strong {
+      font-size: 15px;
+    }
+
+    .list-body {
+      font-size: 14px;
+    }
+
+    .list-body .dash-item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .list-body .dash-item:last-child {
+      border-bottom: none;
+    }
+
+    .btn-view {
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.7);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    .dash-modal .modal-content {
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 1200px) {
+      .top-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .right-layout {
+        grid-template-rows: auto auto auto;
+      }
+
+      .bottom-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .action-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        height: 240px;
+      }
+
+      .hero-text {
+        font-size: 25px;
+      }
+
+      .metric-value {
+        font-size: 26px;
+      }
+
+      .metric-value.money {
+        font-size: 23px;
+      }
+
+      .dashboard-shell {
+        width: 96%;
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="background-full">
+  <img src="../assets/img/fono.png" alt="fondo">
+</div>
+
+<div class="overlay"></div>
+
+<div id="navbar-container"></div>
+
+<div class="dashboard-shell">
+  <div class="dashboard-main">
+
+    <div class="top-layout">
+
+      <!-- IZQUIERDA -->
+      <div class="left-layout">
+        <div class="card-box hero-card">
+          <div class="hero">
+            <img src="../assets/img/nueva-imagen.jpg" alt="imagen dashboard">
+            <div class="hero-text">Un negocio crece cuando tú creces.</div>
+          </div>
+        </div>
+
+        <div class="card-box chart-box">
+          <div class="card-title">Ganancia mensual</div>
+          <div class="chart-wrap">
+            <canvas id="graficaMes"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- DERECHA -->
+      <div class="right-layout">
+        <div class="metrics-grid">
+          <div class="card-box metric-card">
+            <div class="metric-label">Vendidos</div>
+            <div id="productosVendidos" class="metric-value">0</div>
+          </div>
+
+          <div class="card-box metric-card">
+            <div class="metric-label">Total General</div>
+            <div id="totalGeneral" class="metric-value money">L 0.00</div>
+          </div>
+
+          <div class="card-box metric-card">
+            <div class="metric-label">Hoy</div>
+            <div id="totalHoy" class="metric-value money">L 0.00</div>
+          </div>
+
+          <div class="card-box metric-card">
+            <div class="metric-label">Mes</div>
+            <div id="totalMes" class="metric-value money">L 0.00</div>
+          </div>
+
+          <div class="card-box metric-card">
+            <div class="metric-label">Pedidos</div>
+            <div id="pedidosCompletados" class="metric-value">0</div>
+          </div>
+
+          <div class="card-box action-card">
+            <div class="action-buttons">
+              <a href="productos.html" class="btn btn-dark-soft">Productos</a>
+              <a href="pedidos.html" class="btn btn-yellow">Pedidos</a>
+            </div>
+
+            <div class="year-box">
+              <div class="metric-label">Año</div>
+              <div id="totalAno" class="metric-value money">L 0.00</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-box chart-box">
+          <div class="card-title">Ganancia Total</div>
+          <div class="chart-wrap small-donut">
+            <canvas id="graficaTotal"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bottom-layout">
+
+      <div class="bottom-column">
+        <div class="card-box list-panel">
+          <div class="list-header">
+            <strong>Últimas ventas</strong>
+            <button class="btn-view" type="button" onclick="Admin.openDashModal('ventas')">Ver más</button>
+          </div>
+          <div class="list-body" id="dash-ultimas-ventas">Cargando...</div>
+        </div>
+
+        <div class="card-box list-panel">
+          <div class="list-header">
+            <strong>Mejores clientes</strong>
+            <button class="btn-view" type="button" onclick="Admin.openDashModal('clientes')">Ver más</button>
+          </div>
+          <div class="list-body" id="dash-top-clientes">Cargando...</div>
+        </div>
+      </div>
+
+      <div class="bottom-column">
+        <div class="card-box list-panel">
+          <div class="list-header">
+            <strong>Top productos</strong>
+            <button class="btn-view" type="button" onclick="Admin.openDashModal('productos')">Ver más</button>
+          </div>
+          <div class="list-body" id="dash-top-productos">Cargando...</div>
+        </div>
+
+        <div class="card-box list-panel">
+          <div class="list-header">
+            <strong>Clientes activos</strong>
+            <button class="btn-view" type="button" onclick="Admin.openDashModal('activos')">Ver más</button>
+          </div>
+          <div class="list-body" id="dash-clientes-activos">Cargando...</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade dash-modal" id="dashModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dashModalTitle">Detalle</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" id="dashModalBody"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/utils.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/navbar.js"></script>
+<script src="../assets/js/admin.js"></script>
+
+<script>
+Auth.requireAuth(["admin"]);
+
+async function initDashboard() {
+  await Admin.loadEstadisticas();
+  await recalcularMesFrontend();
+  crearGraficas();
+  await Admin.loadDashboardResumen();
+}
+
+function limpiarMoneda(valor) {
+  return parseFloat(String(valor).replace(/[^\d.-]/g, "")) || 0;
+}
+
+async function recalcularMesFrontend() {
+  const pedidos = await API.getPedidosAdmin();
+
+  const hoy = new Date();
+  const mes = hoy.getMonth();
+  const año = hoy.getFullYear();
+
+  let totalMes = 0;
+
+  pedidos.forEach(p => {
+    const fecha = new Date(p.createdAt);
+
+    if (
+      fecha.getMonth() === mes &&
+      fecha.getFullYear() === año &&
+      p.estado === "completado"
+    ) {
+      totalMes += Number(p.total);
+    }
+  });
+
+  document.getElementById("totalMes").textContent = "L " + totalMes.toFixed(2);
+}
+
+function crearGraficas() {
+  const totalGeneral = limpiarMoneda(document.getElementById("totalGeneral").innerText);
+  const totalMes = limpiarMoneda(document.getElementById("totalMes").innerText);
+
+  if (window.graficaTotalInstance) window.graficaTotalInstance.destroy();
+  if (window.graficaMesInstance) window.graficaMesInstance.destroy();
+
+  window.graficaTotalInstance = new Chart(document.getElementById("graficaTotal"), {
+    type: "doughnut",
+    data: {
+      labels: ["Total"],
+      datasets: [{
+        label: "Total",
+        data: [totalGeneral || 1],
+        backgroundColor: ["#3b9be3"],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "58%",
+      plugins: {
+        legend: {
+          display: true,
+          position: "top"
+        }
+      }
+    }
+  });
+
+  window.graficaMesInstance = new Chart(document.getElementById("graficaMes"), {
+    type: "bar",
+    data: {
+      labels: ["Mes actual"],
+      datasets: [{
+        label: "Ganancia mensual",
+        data: [totalMes],
+        backgroundColor: ["#9fd0f5"],
+        borderRadius: 12,
+        borderSkipped: false,
+        maxBarThickness: 90
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          border: { display: false }
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: "rgba(0,0,0,0.06)" },
+          border: { display: false },
+          ticks: {
+            callback: function(value) {
+              return "L " + value;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+initDashboard();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shoparé - Login</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    .container-full {
+      display: flex;
+      height: 100vh;
+    }
+
+    .left-side {
+      width: 50%;
+      background: url('assets/img/fondo-login.jpg') no-repeat center center;
+      background-size: cover;
+    }
+
+    .right-side {
+      width: 50%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      overflow: hidden;
+    }
+
+    .right-side::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('assets/img/fondo-ropa.jpg') no-repeat center center;
+      background-size: cover;
+      filter: blur(10px);
+      transform: scale(1.1);
+      z-index: 0;
+    }
+
+    .right-side::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 1;
+    }
+
+    .login-box {
+      position: relative;
+      z-index: 2;
+      width: 350px;
+    }
+
+    h2 {
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #9ca3af;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    .form-label {
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    .form-control {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #374151;
+      border-radius: 0;
+      color: white;
+    }
+
+    .form-control:focus {
+      background: transparent;
+      color: white;
+      border-color: #6366f1;
+      box-shadow: none;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-top: 10px;
+      color: #9ca3af;
+    }
+
+    .options a {
+      color: #9ca3af;
+      text-decoration: none;
+    }
+
+    .options a:hover {
+      color: white;
+    }
+
+    .btn-login {
+      width: 100%;
+      background: black;
+      border: none;
+      margin-top: 20px;
+      padding: 12px;
+      color: white;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .btn-login:hover {
+      background: #111;
+    }
+
+    .register {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #9ca3af;
+    }
+
+    .register a {
+      color: white;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .register a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .left-side { display: none; }
+      .right-side { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container-full">
+
+  <div class="left-side"></div>
+
+  <div class="right-side">
+
+    <div class="login-box">
+
+      <h2>Welcome back</h2>
+      <div class="subtitle">Please enter your details.</div>
+
+      <form id="loginForm">
+
+        <div class="mb-3">
+          <label class="form-label">E-mail</label>
+          <input type="email" id="email" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" id="password" class="form-control" required>
+        </div>
+
+        <div class="options">
+          <div>
+            <input type="checkbox"> Remember me
+          </div>
+          <a href="#">Forgot your password?</a>
+        </div>
+
+        <button type="submit" class="btn-login">Log in</button>
+
+      </form>
+
+      <div class="register">
+        Don't have an account? <a href="register.html">Register here</a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/utils.js"></script>
+<script src="assets/js/auth.js"></script>
+
+<script>
+  document.getElementById("loginForm").addEventListener("submit", function(e){
+    Auth.handleLogin(e);
+  });
+
+  Auth.redirectIfLoggedIn();
+</script>
+
+</body>
+</html>
