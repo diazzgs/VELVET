@@ -1,8 +1,8 @@
-
 const AdminProductos = {};
 
- 
- AdminProductos.loadCategoriasSelect = async function () {
+
+// ================= CATEGORÍAS =================
+AdminProductos.loadCategoriasSelect = async function () {
   const select = document.getElementById("categoriaSelect");
   if (!select) return;
 
@@ -26,14 +26,16 @@ const AdminProductos = {};
 };
 
 
-
- 
- AdminProductos.loadProductoToForm = async function (id) {
+// ================= CARGAR PRODUCTO =================
+AdminProductos.loadProductoToForm = async function (id) {
   try {
     const productos = await API.getProductos();
     const p = productos.find(prod => prod.id == id);
 
-    if (!p) return alert("Producto no encontrado");
+    if (!p) {
+      showAlert("Producto no encontrado", "error");
+      return;
+    }
 
     document.getElementById("productoId").value = p.id;
     document.getElementById("nombre").value = p.nombre || "";
@@ -41,19 +43,17 @@ const AdminProductos = {};
     document.getElementById("marca").value = p.marca || "";
     document.getElementById("precio").value = p.precio || "";
     document.getElementById("stock").value = p.stock || "";
-
-     document.getElementById("categoriaSelect").value = p.categoria_id || "";
+    document.getElementById("categoriaSelect").value = p.categoria_id || "";
 
   } catch (e) {
     console.error(e);
-    alert("Error al cargar datos del producto.");
+    showAlert("Error al cargar datos del producto.", "error");
   }
 };
 
 
-
- 
- AdminProductos.handleForm = async function (ev) {
+// ================= GUARDAR / ACTUALIZAR =================
+AdminProductos.handleForm = async function (ev) {
   ev.preventDefault();
 
   const id = document.getElementById("productoId").value;
@@ -73,48 +73,51 @@ const AdminProductos = {};
   try {
     if (id) {
       await API.updateProducto(id, formData);
-      alert("Producto actualizado correctamente");
+
+      showAlert("Producto actualizado correctamente.", "success", () => {
+        window.location.href = "productos.html";
+      });
+
     } else {
       await API.createProducto(formData);
-      alert("Producto creado correctamente");
-    }
 
-    window.location.href = "productos.html";
+      showAlert("Producto creado correctamente.", "success", () => {
+        window.location.href = "productos.html";
+      });
+    }
 
   } catch (error) {
     console.error(error);
-    alert("Error al guardar producto");
+    showAlert("Error al guardar producto.", "error");
   }
 };
 
 
-
- 
+// ================= INIT =================
 AdminProductos.init = async function () {
 
-   if (document.getElementById("productos-tbody")) {
+  if (document.getElementById("productos-tbody")) {
     AdminProductos.loadProductos();
   }
 
-   if (document.getElementById("productoForm")) {
+  if (document.getElementById("productoForm")) {
 
-     await AdminProductos.loadCategoriasSelect();
+    await AdminProductos.loadCategoriasSelect();
 
-     const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
     if (id) {
       document.getElementById("tituloForm").textContent = "Editar producto";
-
-       await AdminProductos.loadProductoToForm(id);
+      await AdminProductos.loadProductoToForm(id);
     }
 
-     document
+    document
       .getElementById("productoForm")
       .addEventListener("submit", AdminProductos.handleForm);
   }
 };
 
-document.addEventListener("DOMContentLoaded", AdminProductos.init);
 
+document.addEventListener("DOMContentLoaded", AdminProductos.init);
 window.AdminProductos = AdminProductos;
